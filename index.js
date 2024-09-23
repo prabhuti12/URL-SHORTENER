@@ -8,9 +8,6 @@ const URL = require("./models/url");
 const app = express();
 const PORT = 8001;
 
-connectToMongoDB("mongodb://localhost:27017/short-url").then(() =>
-  console.log("Mongodb connected")
-);
 
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
@@ -38,4 +35,7 @@ app.get("/url/:shortId", async (req, res) => {
   res.redirect(entry.redirectURL);
 });
 
-app.listen(PORT, () => console.log(`Server Started at PORT:${PORT}`));
+connectToMongoDB("mongodb://localhost:27017/short-url").then(() => {
+  console.log("MongoDB connected");
+  app.listen(PORT, () => console.log(`Server started at PORT:${PORT}`));
+}).catch(err => console.error("MongoDB connection error:", err));
